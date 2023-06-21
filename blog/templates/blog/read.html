@@ -1,0 +1,79 @@
+{% extends "base_generic.html" %}
+
+{% block content%}
+
+Hello you have now logged in.
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{%url 'blog:main'%}">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{%url 'blog:write_blog'%}">Write</a>
+            </li>
+            <li class="nav-item">
+                <a href="{%url 'logout'%}?next=/blog/">Logout</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+{%if blog%}
+<head>
+    <title>
+        {{blog.title}}
+    </title>
+</head>
+<div>
+    <h2>{{blog.title}}</h2>
+    <p>{{blog.content}}</p>
+    <p>Written by : {{blog.author}}</p>
+    <p>Written date : {{blog.written_date}}</p>
+    <p>Last updated : {{blog.lastupdated}}</p>
+    <p>likes = {{blog.likes}}</p>
+    
+</div>
+<div>
+    <a href="{%url 'blog:like_post' blog.id%}">
+        <button id="like">
+            <i class="fa fa-thumbs-up"></i>
+            <span class="icon">Like</span>
+        </button>
+    </a>
+    <button id="comment" onclick="show()">Comment</button>
+    <form method="post" action="{%url 'blog:comment_blog' blog.id%}" id="comment-box" hidden>
+        {% csrf_token %}
+        <input type="text" name="comment">
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <button type="submit">Save</button>
+    </form>
+
+</div>
+<div>
+    {%for comment in comments%}
+    <h5>{{comment.user.username}}</h5>
+    <p>{{comment.comment}}</p>
+    {%endfor%}
+</div>
+{%else%}
+No blog here, errr!
+{%endif%}
+<script>
+    function show() {
+            document.getElementById('comment-box').hidden = false;
+        }
+</script>
+
+{% endblock %}

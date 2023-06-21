@@ -1,0 +1,60 @@
+{% extends "base_generic.html" %}
+
+{% block content%}
+
+<head>
+    <title>
+        Blogs
+    </title>
+</head>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{%url 'blog:write_blog'%}">Write</a>
+            </li>
+            <li class="nav-item">
+                <a href="{%url 'logout'%}?next=/blog/">Logout</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<p>Here are some blogs we have,</p>
+{%if blogs%}
+<div>
+    
+{%for blog in blogs%}
+<a href="{%url 'blog:read_blog' blog.id%}">
+    <h2>{{blog.title}}</h2>
+    <p>{{blog.content|truncatechars:5}}</p>
+    <p>Written by : {{blog.author}}</p>
+    <p>Written date : {{blog.written_date}}</p>
+    <p>Last updated : {{blog.lastupdated}}</p>
+    <p>likes = {{blog.likes}}</p>
+    <a href="{%url 'blog:update_blog' blog.id%}">Update</a>
+</a>
+
+
+{%endfor%}
+{%else%}
+<h2>No blogs here currently</h2>
+{%endif%}
+{% endblock %}
+</div>
+
+
+
